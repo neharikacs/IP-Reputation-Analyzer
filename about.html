@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About - IP Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    nav {
+      background-color: #32004c;
+      padding: 1.2rem 3rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links a {
+      margin-left: 2rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #d1aaff;
+    }
+
+    .container {
+      padding: 3rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #32004c;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #32004c;
+      display: inline-block;
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section h2 {
+      color: #5e0088;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section p {
+      color: #333;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">IP Tracker</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/history">History</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+<main>
+  <div class="container">
+    <h1>About IP Tracker</h1>
+
+    <div class="section">
+      <h2>Objective</h2>
+      <p>
+        To develop a web-based tool that analyzes the reputation of IP addresses by scraping data from multiple sources and applying a custom algorithm to categorize IPs as malicious, safe, or suspicious.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Abstract</h2>
+      <p>
+        The IP Tracker project provides a unified platform for IP reputation analysis. It gathers threat intelligence from sites like VirusTotal, AbuseIPDB, and Shodan using scraping (not APIs) and combines the data with a proprietary algorithm for final classification. The system is designed to be lightweight, fast, and informative for cybersecurity purposes. Future upgrades include ML-based classification and history tracking.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>How It Works</h2>
+      <p>
+        Users enter an IP address, and the backend scrapes results from major threat intelligence platforms. These are parsed, analyzed, and scored using preset rules and optional ML models. The final status is displayed with a detailed report.
+      </p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

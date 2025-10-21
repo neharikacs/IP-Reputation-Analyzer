@@ -34,7 +34,7 @@ def show_ip_on_map(ip_address, latitude, longitude, folder='templates'):
 
 def init_mongo():
     connection_string = (
-    "add string"
+    "mongodb+srv://signofthetimes0309:YhfLMRijgW4vVEAi@cluster0.z8oq8.mongodb.net/"
     "ip_reputation_db?retryWrites=true&w=majority&authSource=admin&connectTimeoutMS=120000&socketTimeoutMS=120000"
 )
    
@@ -460,6 +460,5 @@ def main():
     
 if __name__ == "__main__":
     main()
-
 
 

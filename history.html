@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-center">IP Search History</h2>
+
+{% if results %}
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>IP Address</th>
+                <th>Final Score</th>
+                <th>Verdict</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in results %}
+            <tr>
+                <td>{{ entry.get('IP Address') }}</td>
+                <td>{{ entry.get('Final Reputation Score') }}</td>
+                <td>{{ entry.get('Reputation Verdict') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-muted mt-3">No records found.</p>
+{% endif %}
+{% endblock %}

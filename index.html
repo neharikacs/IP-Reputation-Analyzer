@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>IP Reputation Checker</h1>
+  <form method="POST" action="/">
+      <input type="text" name="ip" placeholder="Enter IP address" required>
+      <button type="submit">Check</button>
+  </form>
+{% endblock %}

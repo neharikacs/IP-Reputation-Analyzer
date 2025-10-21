@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IP Reputation analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #000;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav {
+      background-color: #32004c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      color: white;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #d1aaff;
+    }
+
+    main {
+      padding: 2rem 3rem;
+    }
+
+    h2, h3 {
+      text-align: center;
+      margin: 2rem 0 1rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 3rem auto;
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #32004c;
+      color: white;
+    }
+
+    iframe {
+      width: 80%;
+      height: 300px;
+      border: none;
+      margin: 2rem auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .info {
+      width: 50%;
+      margin: 1rem auto;
+      background: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+      display: block;
+      margin: 2rem auto;
+      text-align: center;
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    .logo{
+        color: white;
+    }
+    body.dark-mode {
+      background-color: #1e1e2f;
+      color: #f5f5f5;
+    }
+
+    body.dark-mode nav {
+      background-color: #1a0033;
+    }
+
+    body.dark-mode th {
+      background-color: #444;
+    }
+
+    body.dark-mode table,
+    body.dark-mode .info {
+      background-color: #2a2a3b;
+    }
+    #reputation-table {
+      margin-top: 60px;  /* adjust this value as needed */
+    }
+    .toggle-btn {
+      background-color: #fff;
+      color: #1e1e2f;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .section-top {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem 3rem 0 3rem;
+      flex-wrap: wrap;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 140px;       /* Changed from 200px */
+      height: 140px;      /* Changed from 200px */
+      margin-top: 1.5rem;
+    }
+  
+    .chart-floating {
+      position: absolute;
+      top: 100px;
+      right: 40px;
+      z-index: 10;
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    .chart-container.small {
+      width: 130px;
+      height: 130px;
+      top: 11px;      /* adjust this value to move it below navbar */
+      right: 40px;
+    }
+  
+    .chart-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: inherit;
+      text-align: center;
+    }
+
+    .ip-info {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 60%;
+    }
+
+    .btn-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      padding: 2rem;
+    }
+
+    .analyze-btn {
+      padding: 0.8rem 1.5rem;
+      background-color: #32004c;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 30px;
+    }
+
+    .about-section {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-section h2 {
+      text-align: center;
+      color: #32004c;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-section p {
+      margin: 1rem 0;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    body.dark-mode .about-section {
+      background-color: #2a2a3b;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo"><a href='/'>IP Reputation Analysis</a></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/history">History</a>
+      <a href="/about">About</a>
+      <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+    </div>
+  </nav>
+
+  <main>
+    {% if about %}
+    <div class="about-section">
+      <h2>About This Project</h2>
+      <p><strong>Objective:</strong> The goal of this project is to provide an intuitive platform to assess the reputation of IP addresses using data from multiple sources such as VirusTotal, AbuseIPDB, and Shodan. It uses web scraping and a custom algorithm to determine whether an IP is clean, moderate, or malicious.</p>
+      <p><strong>Abstract:</strong> In today's digital world, identifying potentially harmful IP addresses is essential for cybersecurity. This project fetches reports from public threat intelligence tools without requiring API keys, applies our own analysis algorithm, and then generates a final reputation score. Results are displayed visually using charts and a detailed report, enabling users to make better security decisions.</p>
+    </div>
+    {% else %}
+    <div class="chart-floating">
+      <div class="chart-container small">
+        <canvas id="reputationChart"></canvas>
+        <div class="chart-label" id="chartLabel"></div>
+      </div>
+    </div>
+
+    <h2>IP Reputation Result</h2>
+    <table>
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th>Field</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>IP Address</strong></td>
+          <td>{{ result['IP Address'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>Country</strong></td>
+          <td>{{ result['Country'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>City</strong></td>
+          <td>{{ result['City'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>ISP</strong></td>
+          <td>{{ result['ISP'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>ASN</strong></td>
+          <td>{{ result['ASN'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>Organization</strong></td>
+          <td>{{ result['Organization'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>Timezone</strong></td>
+          <td>{{ result['Timezone'] }}</td>
+        </tr>
+        <tr>
+          <td><strong>Operating System</strong></td>
+          <td>{{ result['Operating System'] }}</td>
+        </tr> 
+      </tbody>
+    </table>
+          
+    <h3>Metric Values (Raw)</h3>
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>IP Address</td><td>{{ result['IP Address'] }}</td></tr>
+      <tr><td>Confidence of Abuse (%)</td><td>{{ result['Confidence of Abuse (%)'] }}</td></tr>
+      <tr><td>Reported Times</td><td>{{ result['Reported Times'] }}</td></tr>
+      <tr><td>Security Vendors Flagged</td><td>{{ result['Security Vendors Flagged'] }}</td></tr>
+      <tr><td>Open Ports</td><td>{{ result['Open Ports'] }}</td></tr>
+    </table>
+
+    <h3>Final Results</h3>
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Final Reputation Score</td><td>{{ result['Final Reputation Score'] }}</td></tr>
+      <tr><td>Reputation Verdict</td><td>{{ result['Reputation Verdict'] }}</td></tr>
+    </table>
+
+    <h3>Location on Map</h3>
+    <iframe src="{{ map_path }}"></iframe>
+
+    <div class="btn-wrapper">
+      <a href="/" class="analyze-btn">🔍 Analyze Another IP</a>
+    </div>
+    {% endif %}
+  </main>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      const btn = document.querySelector(".toggle-btn");
+      btn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+  
+    // Ensure the score is parsed correctly as a number
+    const score = parseFloat("{{ result['Final Reputation Score'] | default(0) }}");
+    const ctx = document.getElementById('reputationChart')?.getContext('2d');
+    const chartLabel = document.getElementById('chartLabel');
+  
+    if (ctx && chartLabel) {
+      let bgColor = ['#ffa726', '#eeeeee'];
+      let verdict = "Moderate";
+  
+      if (score >= 61) {
+        bgColor = ['#e74c3c', '#eeeeee'];
+        verdict = "Malicious";
+      } else if (score >= 31 && score < 60) {
+        bgColor = ['#ffa726', '#eeeeee'];
+        verdict = "Moderate";
+      } else {
+        bgColor = ['#2ecc71', '#eeeeee'];
+        verdict = "Clean";
+      }
+  
+      chartLabel.innerHTML = `
+        <div style="font-size: 22px; font-weight: bold;">${score.toFixed(1)}</div>
+        <div style="font-size: 14px; color: #888;">${verdict}</div>
+      `;
+  
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Score', 'Remaining'],
+          datasets: [{
+            data: [score, 100 - score],
+            backgroundColor: bgColor,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          cutout: '70%',
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          }
+        }
+      });
+    }
+  </script>
+  </body>
+  </html>
